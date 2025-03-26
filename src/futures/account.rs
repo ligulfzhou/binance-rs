@@ -6,7 +6,7 @@ use crate::client::Client;
 use crate::api::{API, Futures};
 use crate::model::Empty;
 use crate::account::OrderSide;
-use crate::futures::model::{Order, TradeHistory};
+use crate::futures::model::{Order, PositionRiskV3, TradeHistory};
 
 use super::model::{
     ChangeLeverageResponse, Transaction, CanceledOrder, PositionRisk, AccountBalance,
@@ -572,6 +572,18 @@ impl FuturesAccount {
         let request = build_signed_request(parameters, self.recv_window)?;
         self.client
             .get_signed(API::Futures(Futures::PositionRisk), Some(request))
+    }
+
+    pub fn position_information_v3<S>(&self, symbol: S) -> Result<Vec<PositionRiskV3>>
+    where
+        S: Into<String>,
+    {
+        let mut parameters = BTreeMap::new();
+        parameters.insert("symbol".into(), symbol.into());
+
+        let request = build_signed_request(parameters, self.recv_window)?;
+        self.client
+            .get_signed(API::Futures(Futures::PositionRiskV3), Some(request))
     }
 
     pub fn account_information(&self) -> Result<AccountInformation> {

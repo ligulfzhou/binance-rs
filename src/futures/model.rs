@@ -350,6 +350,31 @@ pub struct PositionRisk {
     pub update_time: u64,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct PositionRiskV3 {
+    pub symbol: String,
+    pub position_side: String,
+    pub position_amt: String,
+    pub entry_price: String,
+    pub break_even_price: String,
+    pub mark_price: String,
+    pub un_realized_profit: String,
+    pub liquidation_price: String,
+    pub isolated_margin: String,
+    pub notional: String,
+    pub margin_asset: String,
+    pub isolated_wallet: String,
+    pub initial_margin: String,
+    pub maint_margin: String,
+    pub position_initial_margin: String,
+    pub open_order_initial_margin: String,
+    pub adl: i64,
+    pub bid_notional: String,
+    pub ask_notional: String,
+    pub update_time: i64,
+}
+
 #[derive(Debug, Serialize, Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct FuturesAsset {
