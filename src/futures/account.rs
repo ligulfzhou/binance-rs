@@ -212,6 +212,111 @@ impl Display for IncomeType {
 }
 
 impl FuturesAccount {
+    pub fn stop_market_reduce_buy<S, F>(&self, symbol: S, stop_price: F) -> Result<Transaction>
+    where
+        S: Into<String>,
+        F: Into<f64>,
+    {
+        let sell = OrderRequest {
+            symbol: symbol.into(),
+            side: OrderSide::Buy,
+            position_side: None,
+            order_type: OrderType::StopMarket,
+            time_in_force: None,
+            qty: None,
+            reduce_only: None,
+            price: None,
+            stop_price: Some(stop_price.into()),
+            close_position: None,
+            activation_price: None,
+            callback_rate: None,
+            working_type: None,
+            price_protect: None,
+        };
+        let order = self.build_order(sell);
+        let request = build_signed_request(order, self.recv_window)?;
+        self.client
+            .post_signed(API::Futures(Futures::Order), request)
+    }
+
+    // Place a STOP_MARKET close - SELL
+    pub fn stop_market_reduce_sell<S, F>(&self, symbol: S, stop_price: F) -> Result<Transaction>
+    where
+        S: Into<String>,
+        F: Into<f64>,
+    {
+        let sell = OrderRequest {
+            symbol: symbol.into(),
+            side: OrderSide::Sell,
+            position_side: None,
+            order_type: OrderType::StopMarket,
+            time_in_force: None,
+            qty: None,
+            reduce_only: None,
+            price: None,
+            stop_price: Some(stop_price.into()),
+            close_position: None,
+            activation_price: None,
+            callback_rate: None,
+            working_type: None,
+            price_protect: None,
+        };
+        let order = self.build_order(sell);
+        let request = build_signed_request(order, self.recv_window)?;
+        self.client
+            .post_signed(API::Futures(Futures::Order), request)
+    }
+
+    pub fn limit_buy_reduce_only(
+        &self, symbol: impl Into<String>, qty: impl Into<f64>, price: f64,
+    ) -> Result<Transaction> {
+        let buy = OrderRequest {
+            symbol: symbol.into(),
+            side: OrderSide::Buy,
+            position_side: None,
+            order_type: OrderType::Limit,
+            time_in_force: None,
+            qty: Some(qty.into()),
+            reduce_only: Some(true),
+            price: Some(price),
+            stop_price: None,
+            close_position: None,
+            activation_price: None,
+            callback_rate: None,
+            working_type: None,
+            price_protect: None,
+        };
+        let order = self.build_order(buy);
+        let request = build_signed_request(order, self.recv_window)?;
+        self.client
+            .post_signed(API::Futures(Futures::Order), request)
+    }
+
+    pub fn limit_sell_reduce_only(
+        &self, symbol: impl Into<String>, qty: impl Into<f64>, price: f64,
+    ) -> Result<Transaction> {
+        let sell = OrderRequest {
+            symbol: symbol.into(),
+            side: OrderSide::Sell,
+            position_side: None,
+            order_type: OrderType::Limit,
+            time_in_force: None,
+            qty: Some(qty.into()),
+            reduce_only: Some(true),
+            price: Some(price),
+            stop_price: None,
+            close_position: None,
+            activation_price: None,
+            callback_rate: None,
+            working_type: None,
+            price_protect: None,
+        };
+        let order = self.build_order(sell);
+        let request = build_signed_request(order, self.recv_window)?;
+        self.client
+            .post_signed(API::Futures(Futures::Order), request)
+    }
+
     pub fn limit_buy(
         &self, symbol: impl Into<String>, qty: impl Into<f64>, price: f64,
         time_in_force: TimeInForce,
