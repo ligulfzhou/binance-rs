@@ -212,7 +212,9 @@ impl Display for IncomeType {
 }
 
 impl FuturesAccount {
-    pub fn stop_market_reduce_buy<S, F>(&self, symbol: S, stop_price: F) -> Result<Transaction>
+    pub fn stop_market_reduce_buy<S, F>(
+        &self, symbol: S, qty: impl Into<f64>, stop_price: F,
+    ) -> Result<Transaction>
     where
         S: Into<String>,
         F: Into<f64>,
@@ -223,7 +225,7 @@ impl FuturesAccount {
             position_side: None,
             order_type: OrderType::StopMarket,
             time_in_force: None,
-            qty: None,
+            qty: Some(qty.into()),
             reduce_only: None,
             price: None,
             stop_price: Some(stop_price.into()),
@@ -240,7 +242,9 @@ impl FuturesAccount {
     }
 
     // Place a STOP_MARKET close - SELL
-    pub fn stop_market_reduce_sell<S, F>(&self, symbol: S, stop_price: F) -> Result<Transaction>
+    pub fn stop_market_reduce_sell<S, F>(
+        &self, symbol: S, qty: impl Into<f64>, stop_price: F,
+    ) -> Result<Transaction>
     where
         S: Into<String>,
         F: Into<f64>,
@@ -251,7 +255,7 @@ impl FuturesAccount {
             position_side: None,
             order_type: OrderType::StopMarket,
             time_in_force: None,
-            qty: None,
+            qty: Some(qty.into()),
             reduce_only: None,
             price: None,
             stop_price: Some(stop_price.into()),
