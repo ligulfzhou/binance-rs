@@ -672,10 +672,7 @@ impl FuturesAccount {
             .get_signed(API::Futures(Futures::OpenOrders), Some(request))
     }
 
-    pub fn get_order(&self, req: QueryOrderRequest) -> Result<crate::futures::model::Order>
-    where
-        S: Into<String>,
-    {
+    pub fn get_order(&self, req: QueryOrderRequest) -> Result<crate::futures::model::Order> {
         let mut parameters: BTreeMap<String, String> = BTreeMap::new();
         parameters.insert("symbol".into(), req.symbol);
         if let Some(order_id) = req.order_id {
