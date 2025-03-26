@@ -672,7 +672,7 @@ impl FuturesAccount {
             .get_signed(API::Futures(Futures::OpenOrders), Some(request))
     }
 
-    pub fn get_order<S>(&self, req: QueryOrderRequest) -> Result<Vec<crate::futures::model::Order>>
+    pub fn get_order(&self, req: QueryOrderRequest) -> Result<crate::futures::model::Order>
     where
         S: Into<String>,
     {
