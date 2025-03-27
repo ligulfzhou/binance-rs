@@ -99,6 +99,7 @@ pub enum TimeInForce {
     IOC,
     FOK,
     GTX,
+    GTD,
 }
 
 impl Display for TimeInForce {
@@ -108,6 +109,7 @@ impl Display for TimeInForce {
             Self::IOC => write!(f, "IOC"),
             Self::FOK => write!(f, "FOK"),
             Self::GTX => write!(f, "GTX"),
+            Self::GTD => write!(f, "GTD"),
         }
     }
 }
@@ -273,13 +275,14 @@ impl FuturesAccount {
 
     pub fn limit_buy_reduce_only(
         &self, symbol: impl Into<String>, qty: impl Into<f64>, price: f64,
+        time_in_force: TimeInForce,
     ) -> Result<Transaction> {
         let buy = OrderRequest {
             symbol: symbol.into(),
             side: OrderSide::Buy,
             position_side: None,
             order_type: OrderType::Limit,
-            time_in_force: None,
+            time_in_force: Some(time_in_force),
             qty: Some(qty.into()),
             reduce_only: Some(true),
             price: Some(price),
@@ -298,13 +301,14 @@ impl FuturesAccount {
 
     pub fn limit_sell_reduce_only(
         &self, symbol: impl Into<String>, qty: impl Into<f64>, price: f64,
+        time_in_force: TimeInForce,
     ) -> Result<Transaction> {
         let sell = OrderRequest {
             symbol: symbol.into(),
             side: OrderSide::Sell,
             position_side: None,
             order_type: OrderType::Limit,
-            time_in_force: None,
+            time_in_force: Some(time_in_force),
             qty: Some(qty.into()),
             reduce_only: Some(true),
             price: Some(price),
