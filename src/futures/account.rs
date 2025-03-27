@@ -117,9 +117,6 @@ impl Display for TimeInForce {
 pub struct QueryOrderRequest {
     pub symbol: String,
     pub order_id: Option<String>,
-    pub orig_client_order_id: Option<String>,
-    pub recv_window: Option<String>,
-    pub timestamp: u64,
 }
 
 struct OrderRequest {
@@ -803,13 +800,6 @@ impl FuturesAccount {
         if let Some(order_id) = req.order_id {
             parameters.insert("orderId".into(), order_id);
         }
-        if let Some(orig_client_order_id) = req.orig_client_order_id {
-            parameters.insert("origClientOrderId".into(), orig_client_order_id);
-        }
-        if let Some(recv_window) = req.recv_window {
-            parameters.insert("recvWindow".into(), recv_window);
-        }
-        parameters.insert("timestamp".into(), req.timestamp.to_string());
         let request = build_signed_request(parameters, self.recv_window)?;
         self.client
             .get_signed(API::Futures(Futures::Order), Some(request))
