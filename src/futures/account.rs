@@ -271,7 +271,7 @@ impl FuturesAccount {
     }
 
     pub fn limit_buy_reduce_only(
-        &self, symbol: impl Into<String>, qty: impl Into<f64>, price: f64,
+        &self, symbol: impl Into<String>, qty: impl Into<f64>, price: impl Into<f64>,
         time_in_force: TimeInForce,
     ) -> Result<Transaction> {
         let buy = OrderRequest {
@@ -282,7 +282,7 @@ impl FuturesAccount {
             time_in_force: Some(time_in_force),
             qty: Some(qty.into()),
             reduce_only: Some(true),
-            price: Some(price),
+            price: Some(price.into()),
             stop_price: None,
             close_position: None,
             activation_price: None,
@@ -297,7 +297,7 @@ impl FuturesAccount {
     }
 
     pub fn limit_sell_reduce_only(
-        &self, symbol: impl Into<String>, qty: impl Into<f64>, price: f64,
+        &self, symbol: impl Into<String>, qty: impl Into<f64>, price: impl Into<f64>,
         time_in_force: TimeInForce,
     ) -> Result<Transaction> {
         let sell = OrderRequest {
@@ -308,7 +308,7 @@ impl FuturesAccount {
             time_in_force: Some(time_in_force),
             qty: Some(qty.into()),
             reduce_only: Some(true),
-            price: Some(price),
+            price: Some(price.into()),
             stop_price: None,
             close_position: None,
             activation_price: None,
