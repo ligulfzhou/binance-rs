@@ -669,11 +669,23 @@ pub struct IndexPriceEvent {
     #[serde(rename = "E")]
     pub event_time: u64,
 
+    #[serde(rename = "s")]
+    pub symbol: String,
+
     #[serde(rename = "i")]
     pub pair: String,
 
     #[serde(rename = "p")]
     pub price: String,
+
+    #[serde(rename = "r")]
+    pub funding_rate: String,
+
+    #[serde(rename = "T")]
+    pub next_funding_time: String,
+
+    #[serde(rename = "P")]
+    pub settle_price: String,
 }
 // https://binance-docs.github.io/apidocs/futures/en/#mark-price-stream
 // https://binance-docs.github.io/apidocs/delivery/en/#mark-price-stream
