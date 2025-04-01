@@ -211,6 +211,35 @@ impl Display for IncomeType {
 }
 
 impl FuturesAccount {
+    pub fn trailing_stop_market_reduce_only<S, F>(
+        &self, side: OrderSide, symbol: S, qty: impl Into<f64>, callback_rate: F,
+    ) -> Result<Transaction>
+    where
+        S: Into<String>,
+        F: Into<f64>,
+    {
+        let sell = OrderRequest {
+            symbol: symbol.into(),
+            side,
+            position_side: None,
+            order_type: OrderType::StopMarket,
+            time_in_force: None,
+            qty: Some(qty.into()),
+            reduce_only: Some(true),
+            price: None,
+            stop_price: None,
+            close_position: None,
+            activation_price: None,
+            callback_rate: Some(callback_rate.into()),
+            working_type: None,
+            price_protect: None,
+        };
+        let order = self.build_order(sell);
+        let request = build_signed_request(order, self.recv_window)?;
+        self.client
+            .post_signed(API::Futures(Futures::Order), request)
+    }
+
     pub fn stop_market_reduce_buy<S, F>(
         &self, symbol: S, qty: impl Into<f64>, stop_price: F,
     ) -> Result<Transaction>
