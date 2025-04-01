@@ -222,7 +222,7 @@ impl FuturesAccount {
             symbol: symbol.into(),
             side,
             position_side: None,
-            order_type: OrderType::StopMarket,
+            order_type: OrderType::TrailingStopMarket,
             time_in_force: None,
             qty: Some(qty.into()),
             reduce_only: Some(true),
