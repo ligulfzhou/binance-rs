@@ -213,6 +213,7 @@ impl Display for IncomeType {
 impl FuturesAccount {
     pub fn trailing_stop_market_reduce_only<S, F>(
         &self, side: OrderSide, symbol: S, qty: impl Into<f64>, callback_rate: F,
+        activation_price: impl Into<f64>,
     ) -> Result<Transaction>
     where
         S: Into<String>,
@@ -229,7 +230,7 @@ impl FuturesAccount {
             price: None,
             stop_price: None,
             close_position: None,
-            activation_price: None,
+            activation_price: Some(activation_price.into()),
             callback_rate: Some(callback_rate.into()),
             working_type: None,
             price_protect: None,
