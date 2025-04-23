@@ -63,6 +63,7 @@ impl Client {
             .delete(url.as_str())
             .headers(self.build_headers(true)?)
             .send()?;
+        println!("{:?}", &response);
 
         self.handler(response)
     }

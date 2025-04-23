@@ -474,9 +474,7 @@ impl FuturesAccount {
             .delete_signed(API::Futures(Futures::Order), Some(request))
     }
 
-    pub fn cancel_multiple_orders<S>(
-        &self, symbol: S, order_list: Vec<u64>,
-    ) -> Result<Vec<CanceledOrder>>
+    pub fn cancel_multiple_orders<S>(&self, symbol: S, order_list: Vec<u64>) -> Result<Empty>
     where
         S: Into<String>,
     {
@@ -484,7 +482,11 @@ impl FuturesAccount {
         let mut request = String::new();
         request.push_str(format!("symbol={}&", symbol.into()).as_str());
         if !order_list.is_empty() {
-            let order_list_str = order_list.iter().map(|i| i.to_string()).collect::<Vec<String>>().join(",");
+            let order_list_str = order_list
+                .iter()
+                .map(|i| i.to_string())
+                .collect::<Vec<String>>()
+                .join(",");
             request.push_str(format!("orderIdList=%5B{}%5D&", &order_list_str).as_str());
         }
         // for order_id in order_list {
