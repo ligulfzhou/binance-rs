@@ -484,14 +484,14 @@ impl FuturesAccount {
         let mut request = String::new();
         request.push_str(format!("symbol={}&", symbol.into()).as_str());
         for order_id in order_list {
-            request.push_str(format!("orderIdList={}?", order_id).as_str());
+            request.push_str(format!("orderIdList={}&", order_id).as_str());
         }
         for order_id in orig_client_order_id_list {
-            request.push_str(format!("origClientOrderIdList={}?", order_id).as_str());
+            request.push_str(format!("origClientOrderIdList={}&", order_id).as_str());
         }
-        request.push_str(format!("recvWindow={}", self.recv_window).as_str());
+        request.push_str(format!("recvWindow={}&", self.recv_window).as_str());
         let timestamp = get_timestamp(SystemTime::now())?;
-        request.push_str(format!("timestamp={}", timestamp).as_str());
+        request.push_str(format!("timestamp={}&", timestamp).as_str());
         request.pop();
 
         self.client
