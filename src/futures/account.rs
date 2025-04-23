@@ -475,7 +475,7 @@ impl FuturesAccount {
     }
 
     pub fn cancel_multiple_orders<S>(
-        &self, symbol: S, order_list: Vec<u64>, orig_client_order_id_list: Vec<String>,
+        &self, symbol: S, order_list: Vec<u64>,
     ) -> Result<Vec<CanceledOrder>>
     where
         S: Into<String>,
@@ -483,12 +483,13 @@ impl FuturesAccount {
         // 手动拼参数
         let mut request = String::new();
         request.push_str(format!("symbol={}&", symbol.into()).as_str());
-        for order_id in order_list {
-            request.push_str(format!("orderIdList={}&", order_id).as_str());
+        if !order_list.is_empty() {
+            let order_list_str = order_list.iter().map(|i| i.to_string()).collect::<Vec<String>>().join(",");
+            request.push_str(format!("orderIdList=%5B{}%5D&", &order_list_str).as_str());
         }
-        for order_id in orig_client_order_id_list {
-            request.push_str(format!("origClientOrderIdList={}&", order_id).as_str());
-        }
+        // for order_id in order_list {
+        //     request.push_str(format!("orderIdList={}&", order_id).as_str());
+        // }
         request.push_str(format!("recvWindow={}&", self.recv_window).as_str());
         let timestamp = get_timestamp(SystemTime::now())?;
         request.push_str(format!("timestamp={}", timestamp).as_str());
