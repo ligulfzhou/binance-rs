@@ -491,8 +491,7 @@ impl FuturesAccount {
         }
         request.push_str(format!("recvWindow={}&", self.recv_window).as_str());
         let timestamp = get_timestamp(SystemTime::now())?;
-        request.push_str(format!("timestamp={}&", timestamp).as_str());
-        request.pop();
+        request.push_str(format!("timestamp={}", timestamp).as_str());
 
         self.client
             .delete_signed(API::Futures(Futures::BatchOrders), Some(request))
