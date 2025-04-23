@@ -476,7 +476,7 @@ impl FuturesAccount {
 
     pub fn cancel_multiple_orders<S>(
         &self, symbol: S, order_list: Vec<u64>, orig_client_order_id_list: Vec<String>,
-    ) -> Result<CanceledOrder>
+    ) -> Result<Vec<CanceledOrder>>
     where
         S: Into<String>,
     {
