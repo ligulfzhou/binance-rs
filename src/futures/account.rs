@@ -474,7 +474,9 @@ impl FuturesAccount {
             .delete_signed(API::Futures(Futures::Order), Some(request))
     }
 
-    pub fn cancel_multiple_orders<S>(&self, symbol: S, order_list: Vec<u64>) -> Result<Empty>
+    pub fn cancel_multiple_orders<S>(
+        &self, symbol: S, order_list: Vec<u64>,
+    ) -> Result<Vec<CanceledOrder>>
     where
         S: Into<String>,
     {
