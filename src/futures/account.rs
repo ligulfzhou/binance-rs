@@ -1,6 +1,7 @@
 use std::collections::BTreeMap;
 use std::fmt::Display;
-use crate::util::build_signed_request;
+use std::time::SystemTime;
+use crate::util::{build_signed_request, get_timestamp};
 use crate::errors::Result;
 use crate::client::Client;
 use crate::api::{API, Futures};
@@ -471,6 +472,30 @@ impl FuturesAccount {
         let request = build_signed_request(parameters, self.recv_window)?;
         self.client
             .delete_signed(API::Futures(Futures::Order), Some(request))
+    }
+
+    pub fn cancel_multiple_orders<S>(
+        &self, symbol: S, order_list: Vec<u64>, orig_client_order_id_list: Vec<String>,
+    ) -> Result<CanceledOrder>
+    where
+        S: Into<String>,
+    {
+        // 手动拼参数
+        let mut request = String::new();
+        request.push_str(format!("symbol={}&", symbol.into()).as_str());
+        for order_id in order_list {
+            request.push_str(format!("orderIdList={}?", order_id).as_str());
+        }
+        for order_id in orig_client_order_id_list {
+            request.push_str(format!("origClientOrderIdList={}?", order_id).as_str());
+        }
+        request.push_str(format!("recvWindow={}", self.recv_window).as_str());
+        let timestamp = get_timestamp(SystemTime::now())?;
+        request.push_str(format!("timestamp={}", timestamp).as_str());
+        request.pop();
+
+        self.client
+            .delete_signed(API::Futures(Futures::BatchOrders), Some(request))
     }
 
     pub fn cancel_order_with_client_id<S>(
